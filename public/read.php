@@ -1,8 +1,18 @@
 <?php
+
+/**
+ * Function to query information based on 
+ * a parameter: in this case, location.
+ *
+ */
+
+require "../config.php";
+require "../common.php";
+
 if (isset($_POST['submit'])) {
+  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
+
   try {
-    require "../config.php";
-    require "../common.php";
 
     $connection = new PDO($dsn, $username, $password, $options);
         $sql = "SELECT  *
@@ -64,6 +74,7 @@ if (isset($_POST['submit'])) {
     <h2>Find user based on location</h2>
 
     <form method="post">
+        <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
         <label for="location">Location</label>
         <input type="text" id="location" name="location">
         <input type="submit" name="submit" value="View Results">
